@@ -1,78 +1,101 @@
 <template>
   <div>
-    <b-form  v-if="show">
-              <b-form-group id="input-group-3" label="Transation Type:" label-for="input-3">
-        <b-form-select
-          id="input-3"
-          v-model="form.type"
-          :options="types"
-          required
-        ></b-form-select>
-      </b-form-group>
+    <form>
+      <label for="type">Type:</label><br />
+      <select v-model="form.selected">
+        <option>Debit</option>
+        <option>Credit</option></select
+      ><br />
+      <label>Amount</label><br />
+      <input type="text" v-model.number="form.amount" /><br />
 
-      <b-form-group
-        id="input-group-1"
-        label="Amount:"
-        label-for="input-1"
+      <label>Purpose of Transaction</label><br />
+      <textarea
+        v-model="form.description"
+        placeholder="add multiple lines"
+      ></textarea
+      ><br />
+
+      <button
+        type="button"
+        style="background-color: red; color: white"
+        @click="onSubmit"
+        v-show="buttonshow"
       >
-        <b-form-input
-          id="input-1"
-          v-model="form.amount"
-          type="text"
-          placeholder="Enter Amount"
-          required
-        ></b-form-input>
-      </b-form-group>
-
-      <b-form-group id="input-group-2" label="Description:" label-for="input-2">
-        <b-form-input
-          id="input-2"
-          v-model="form.description"
-          placeholder="Enter Description here"
-          required
-        ></b-form-input>
-      </b-form-group>
-
-
-
-      <b-button type="button" @click="onSubmit()" variant="primary">Submit</b-button>
-      <b-button type="button" @click="onReset()" variant="danger">Reset</b-button>
-    </b-form>
+        Submit
+      </button>
+    </form>
   </div>
 </template>
 
 <script>
+export default {
+  data() {
+    return {
+      form: {
+        amount: "",
+        description: "",
+        selected: "Debit",
+        date: new Date().toISOString().split("T")[0],
+      },
+      // types: [{ text: "Select One", value: "" }, "Debit", "Credit"],
+      // show: true,
+    };
+  },
 
-import {  mapMutations } from 'vuex'
-  export default {
-    data() {
-      return {
-        form: {
-          amount: '',
-          description: '',
-          type: null,
-          date : new Date().toISOString().split("T")[0],
-          
-        },
-        types: [{ text: 'Select One', value: null }, 'Debit','Credit'],
-        show: true
+  computed: {
+    buttonshow: function () {
+      if (
+        this.form.amount != "" &&
+        this.form.name != "" &&
+        this.form.description != "" &&
+        this.form.selected != ""
+      ) {
+        return true;
+      } else {
+        return false;
       }
     },
-    methods: {
-         ...mapMutations([
-      'ADD_USER_DATA'
-    ]),
-      onSubmit() {
-        let data = {...this.form}
-        this.ADD_USER_DATA(data)
-      },
-      onReset() {
-        this.form.amount = ''
-        this.form.description = ''
-        this.form.type = null
-        this.show = true
-        
+  },
+  methods: {
+    onSubmit() {
+      let data = this.form;
+      let checkamount = this.$store.getters.doneEdit;
+
+      if (!isNaN(this.form.amount)) {
+        if (checkamount.length > 0) {
+          let lastamount = checkamount.length - 1;
+          let checkbalance = checkamount[lastamount].Balance;
+          console.log(checkbalance);
+          if (checkbalance >= this.form.amount) {
+            this.$store.dispatch("addNewData", data);
+            this.form = "";
+            let showmodel = false;
+            this.$store.dispatch("offmodal", showmodel);
+          } else {
+            if (this.form.selected == "Credit") {
+              this.$store.dispatch("addNewData", data);
+              this.form = "";
+              let showmodel = false;
+              this.$store.dispatch("offmodal", showmodel);
+            } else {
+              alert("please enter sufficient amount");
+            }
+          }
+        } else {
+          if (this.form.selected == "Debit") {
+            alert("Your balance is Null please credit some amount");
+          } else {
+            this.$store.dispatch("addNewData", data);
+            this.form = "";
+            let showmodel = false;
+            this.$store.dispatch("offmodal", showmodel);
+          }
+        }
+      } else {
+        alert("Please enter correct amount");
       }
-    }
-  }
+    },
+  },
+};
 </script>
