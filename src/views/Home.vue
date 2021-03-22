@@ -1,18 +1,19 @@
 <template>
   <div class="home">
     
-    <forms msg="hey" />
+   <HelloWorld />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import forms from "../components/form";
+import HelloWorld from "../components/HelloWorld";
 export default {
   name: "Home",
   components: {
   
-    forms,
+   HelloWorld
+   
   },
 };
 </script>

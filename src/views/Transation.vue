@@ -1,11 +1,14 @@
 <template>
   <div>
-    <b-button v-b-modal.modal-1 @click="openmodal" >ADD Transation</b-button>
-  <b-modal :hide-footer="true" id="modal-1" title="Add Transation" v-if="hideModal">
+    <b-button v-b-modal.modal-1 @click="openmodal" class="button" variant="success">ADD Transaction</b-button>
+    
+    
+  <b-modal :hide-footer="true" id="modal-1" title="Add Transaction" v-if="hideModal">
       <addtrans />
     </b-modal>
     <table>
   <tr>
+    <th>Transaction-ID</th>
     <th>Date</th>
     <th>Description</th>
     <th>Credit</th>
@@ -13,7 +16,8 @@
     <th>Running Balance</th>
   </tr>
   <tbody >
-<tr v-for="(account, index) in items" :key="index">
+<tr v-for="(account, index) in items " :key="index">
+  <td>{{account._id}}</td>
   <td>{{account.date}}</td>
    <td>{{account.description}}</td>
     <td>{{account.Credit}}</td>
@@ -22,25 +26,43 @@
 </tr>
   </tbody>
   
+  
 </table>
+    <!-- <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <button type="button" class="page-link" v-if="page != 1" @click="page--"> Previous </button>
+        </li>
+        <li class="page-item">
+          <button type="button" class="page-link" v-for="(pageNumber,index) in pages.slice(page-1, page+5)" :key="index" @click="page = pageNumber"> {{pageNumber}} </button>
+        </li>
+        <li class="page-item">
+          <button type="button" @click="page++" v-if="page < pages.length" class="page-link"> Next </button>
+        </li>
+      </ul>
+    </nav>   -->
 
-      
   </div>
 </template>
 
 <script>
-import addtrans from "../components/transform";
+import addtrans from "../components/transactionform";
 import store from "../store/index";
 export default {
  
  data(){
    return{
-     showmodel : ""
+     showmodel : "",
+      
    }
  },
   components: {
     store,
     addtrans,
+  },
+  mounted(){
+    
+    this.$store.dispatch("showTransaction");
   },
   computed: {
     items() {
@@ -80,4 +102,9 @@ td, th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+button{
+  float: right;
+  margin: 10px;
+}
+
 </style>
