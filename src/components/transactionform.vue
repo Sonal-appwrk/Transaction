@@ -36,7 +36,7 @@ export default {
   data() {
     var date = new Date();
 
-    var formattedDate = format(date, "MMMM do, yyyy H:mma");
+    var formattedDate = format(date, "dd-MMM-YYY");
 
     return {
       form: {
@@ -88,7 +88,7 @@ export default {
             await this.$store.dispatch("addNewData", data);
             this.form = "";
             let showmodal = false;
-            this.$store.dispatch("offmodal", showmodaal);
+            this.$store.dispatch("offmodal", showmodal);
           }
         }
       } else {///if amount not numeric
