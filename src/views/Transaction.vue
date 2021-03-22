@@ -16,6 +16,21 @@
     <th>Running Balance</th>
   </tr>
   <tbody >
+    <tr>
+      <td>-</td>
+      
+      <td>-</td>
+      
+      <td>-</td>
+      
+      <td>-</td>
+      
+      <td>-</td>
+      
+      <td>-</td>
+      
+      <td>-</td>
+    </tr>
 <tr v-for="(account, index) in items " :key="index">
   <td>{{account._id}}</td>
   <td>{{account.date}}</td>
@@ -46,7 +61,7 @@
 </template>
 
 <script>
-import addtrans from "../components/transactionform";
+import addtrans from "../components/Transactionform";
 import store from "../store/index";
 export default {
  
@@ -68,6 +83,7 @@ export default {
     items() {
 
       const data = this.$store.getters.doneEdit;
+      
       console.log(data)
       return data;
     },
