@@ -11,7 +11,7 @@ export default new Vuex.Store({
     userData: [],
     showModal: true
   },
-  getters: {
+  getters: {//getter property can fetch state and it is used for bussiness logiv
     doneEdit: state => {
       const data = state.userData;
       var arr = [];
@@ -44,13 +44,13 @@ export default new Vuex.Store({
       return arrRev;
     },
 
-    showModel: (state) => {
+    showModal: (state) => {
       var modalValue = state.showModal
       return modalValue;
     }
 
   },
-  mutations: {
+  mutations: { //this is use fro update the state
 
     ADD_USER_DATA: (state, data) => {
       debugger;
@@ -64,7 +64,7 @@ export default new Vuex.Store({
       state.showModal = data
     }
   },
-  actions: {
+  actions: {//action is used to commit the mutation it means commit the function of mutation
 
     //     addNewData({commit}, newData){
     // commit('ADD_USER_DATA',newData);

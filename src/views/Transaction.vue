@@ -43,19 +43,6 @@
   
   
 </table>
-    <!-- <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item">
-          <button type="button" class="page-link" v-if="page != 1" @click="page--"> Previous </button>
-        </li>
-        <li class="page-item">
-          <button type="button" class="page-link" v-for="(pageNumber,index) in pages.slice(page-1, page+5)" :key="index" @click="page = pageNumber"> {{pageNumber}} </button>
-        </li>
-        <li class="page-item">
-          <button type="button" @click="page++" v-if="page < pages.length" class="page-link"> Next </button>
-        </li>
-      </ul>
-    </nav>   -->
 
   </div>
 </template>
@@ -67,7 +54,7 @@ export default {
  
  data(){
    return{
-     showmodel : "",
+     showmodal : "",
       
    }
  },
@@ -75,20 +62,19 @@ export default {
     store,
     addtrans,
   },
-  mounted(){
-    
+  mounted(){/// function will automatic call when document loaded
     this.$store.dispatch("showTransaction");
   },
   computed: {
     items() {
 
-      const data = this.$store.getters.doneEdit;
+      const data = this.$store.getters.doneEdit; //it willl fetch the data 
       
       console.log(data)
       return data;
     },
     hideModal(){
-      return this.showmodel = this.$store.getters.showModel
+      return this.showmodal = this.$store.getters.showModal
     }
 
 
@@ -96,8 +82,8 @@ export default {
   methods:{
     openmodal(){
       
-      let showmodel = true;
-      this.$store.dispatch('offmodal',showmodel);
+      let showmodal = true;
+      this.$store.dispatch('offmodal',showmodal);
     }
   }
 };

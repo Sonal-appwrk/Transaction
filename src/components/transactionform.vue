@@ -45,8 +45,6 @@ export default {
         selected: "Debit",
         date: formattedDate,
       },
-      // types: [{ text: "Select One", value: "" }, "Debit", "Credit"],
-      // show: true,
     };
   },
 
@@ -62,23 +60,23 @@ export default {
   methods: {
     async onSubmit() {
       let data = this.form;
-      let checkamount = this.$store.getters.doneEdit;
+      let checkamount = this.$store.getters.doneEdit; ///call to the vuex store there is getter property and call the function of the property
 
-      if (!isNaN(this.form.amount)) {
-        if (checkamount.length > 0) {
-          let checkbalance = checkamount[0].Balance;
+      if (!isNaN(this.form.amount)) {//if amount is numeric
+        if (checkamount.length > 0) { //check there is any transaction or not because first transaction only in credit mode
+          let checkbalance = checkamount[0].Balance; //it is fetching the running balance of the account
           console.log(checkbalance);
           if (checkbalance >= this.form.amount) {
-            this.$store.dispatch("addNewData", data);
+            this.$store.dispatch("addNewData", data); //it call the action of the vuex
             this.form = "";
-            let showmodel = false;
-            this.$store.dispatch("offmodal", showmodel);
+            let showmodal = false;
+            this.$store.dispatch("offmodal", showmodal); 
           } else {
             if (this.form.selected == "Credit") {
               this.$store.dispatch("addNewData", data);
               this.form = "";
-              let showmodel = false;
-              this.$store.dispatch("offmodal", showmodel);
+              let showmodal = false;
+              this.$store.dispatch("offmodal", showmodal);
             } else {
               alert("please enter sufficient amount");
             }
@@ -89,11 +87,11 @@ export default {
           } else {
             await this.$store.dispatch("addNewData", data);
             this.form = "";
-            let showmodel = false;
-            this.$store.dispatch("offmodal", showmodel);
+            let showmodal = false;
+            this.$store.dispatch("offmodal", showmodaal);
           }
         }
-      } else {
+      } else {///if amount not numeric
         alert("Please enter correct amount");
       }
     },
