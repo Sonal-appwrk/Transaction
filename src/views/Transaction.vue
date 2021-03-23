@@ -18,7 +18,6 @@
     </b-modal>
     <table>
       <tr>
-        <th>Transaction-ID</th>
         <th>Date</th>
         <th>Description</th>
         <th>Credit</th>
@@ -26,21 +25,7 @@
         <th>Running Balance</th>
       </tr>
       <tbody>
-        <tr>
-          <td>-</td>
-
-          <td>-</td>
-
-          <td>-</td>
-
-          <td>-</td>
-
-          <td>-</td>
-
-          <td>-</td>
-        </tr>
         <tr v-for="(account, index) in items" :key="index">
-          <td>{{ account._id }}</td>
           <td>{{ account.date }}</td>
           <td>{{ account.description }}</td>
           <td>{{ account.Credit }}</td>
@@ -49,42 +34,86 @@
         </tr>
       </tbody>
     </table>
+    <div class="container">
+      <table>
+        <tr>
+          <td v-for="(page, index) in pagination" :key="index">
+            <b-button
+              variant="light"
+              class="pageButton"
+              @click="transactionLimitShow(index)"
+              >{{ index + 1 }}</b-button
+            >
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
 </template>
 
 <script>
-import addtrans from "../components/Transactionform";
+import addtrans from "../components/transactionform";
 import store from "../store/index";
 export default {
   data() {
     return {
       showmodal: "",
+      page: 0,
+      perPage: 4,
+      pagelength: 1,
+      skip: 0,
     };
   },
   components: {
     store,
     addtrans,
   },
-  mounted() {
-    /// function will automatic call when document loaded
-    this.$store.dispatch("showTransaction");
+  created() {
+    this.$store.dispatch("showTransaction", this.skip);
+    
+       this.$store.dispatch("getTransactionLength"); //it will call only one time
   },
+
   computed: {
     // for function we dont need to call this function again again in computed property
     items() {
       const data = this.$store.getters.doneEdit; //it willl fetch the data
-
-      console.log(data);
       return data;
     },
+    pagination() { //call to the action ,action call to the api for data length
+      this.pagelength = this.$store.getters.getTransactionLength; //it will fetch the length
+      if (this.pagelength % 4 == 0) {
+        //if the length is even we don't need add one more page
+        let a = Array.from({ length: this.pagelength / this.perPage }); ///divide the records according to the perpage
+
+        return a;
+      } else {
+        let a = Array.from({ length: this.pagelength / this.perPage + 1 });
+
+        return a;
+      }
+    },
     hideModal() {
+      // after submission the modal should be hide
+      
+       this.$store.dispatch("getTransactionLength");
+      this.$store.dispatch("showTransaction", this.skip);
       return (this.showmodal = this.$store.getters.showModal);
     },
   },
   methods: {
     openmodal() {
+      //if the modal is clicked
       let showmodal = true;
       this.$store.dispatch("offmodal", showmodal);
+    },
+    transactionLimitShow(index) {
+      //this function is called by page Button
+
+      this.page = index;
+      this.skip = this.page * this.perPage;
+
+      this.$store.dispatch("showTransaction", this.skip); //to call api for fetching the data
     },
   },
 };
@@ -109,5 +138,16 @@ tr:nth-child(even) {
 button {
   float: right;
   margin: 10px;
+}
+.container {
+  text-align: center;
+  width: 100px;
+  height: 200px;
+  padding-top: 100px;
+}
+.pageButton {
+  font-size: 25px;
+  margin: 0;
+  text-align: center;
 }
 </style>

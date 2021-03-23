@@ -16,7 +16,7 @@
         ></b-form-input>
       </b-form-group>
 
-      <label>Purpose of Transaction</label><br />
+      <label>Purpose of Transaction:</label><br />
       <b-form-textarea
         id="textarea-default"
         placeholder="Purpose Your Transaction"

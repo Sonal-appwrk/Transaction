@@ -9,51 +9,31 @@ export default new Vuex.Store({
   state: {
 
     userData: [],
-    showModal: true
+    showModal: true,
+    transactionLength: 1,
   },
   getters: {//getter property can fetch state and it is used for bussiness logic
     doneEdit: state => {
       const data = state.userData;
-      var arr = [];
-      var Balance = 0;
-      data.forEach(element => {
-        if (element["selected"] == "Credit") {
-          Balance = Balance + element.amount;
-          var Debit = '-';
-          var Credit = element.amount
-          element.Balance = Balance;
-          element.Debit = Debit;
-          element.Credit = Credit;
-          arr.push(element);
-
-        }
-        else {
-          Balance = Balance - element.amount;
-          var Credit = '-';
-
-          var Debit = element.amount
-          element.Balance = Balance;
-          element.Debit = Debit;
-          element.Credit = Credit;
-          arr.push(element);
-
-        }
-      })
-      const arrRev= arr.reverse();
-      console.log(arrRev);
-      return arrRev;
+      return data;
     },
 
     showModal: (state) => {
       var modalValue = state.showModal
       return modalValue;
+    },
+    getTransactionLength: (state) => {
+      debugger;
+      var transactionLength = state.transactionLength //store the state value in to new variable
+      
+      return transactionLength;
     }
 
   },
   mutations: { //this is use fro update the state
 
     ADD_USER_DATA: (state, data) => {
-      debugger;
+      
       state.userData = data;
 
     },
@@ -62,7 +42,12 @@ export default new Vuex.Store({
     },
     HIDE_MODAL: (state, data) => {
       state.showModal = data
+    },
+    Get_Transaction_Length: (state, data) => {
+      debugger;
+      state.transactionLength = data
     }
+
   },
   actions: {//action is used to commit the mutation it means commit the function of mutation
 
@@ -77,8 +62,8 @@ export default new Vuex.Store({
 
       return true;
     },
-    async showTransaction({ commit }) {
-      await axios.get("http://localhost:8080/allTransaction").then((res) => {
+    async showTransaction({ commit }, skip) {
+      await axios.get("http://localhost:8080/allTransaction/" + skip).then((res) => {
         const data = res.data;
 
         commit('ADD_USER_DATA', data);
@@ -86,6 +71,14 @@ export default new Vuex.Store({
 
 
 
+    },
+    async getTransactionLength({ commit }) {
+      debugger;
+      await axios.get("http://localhost:8080/transactionLength").then((res) => {
+        const data = res.data;
+
+        commit('Get_Transaction_Length', data);
+      })
     },
     offmodal({ commit }, data) {
       commit('HIDE_MODAL', data)
