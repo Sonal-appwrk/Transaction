@@ -11,7 +11,7 @@ export default new Vuex.Store({
     userData: [],
     showModal: true
   },
-  getters: {//getter property can fetch state and it is used for bussiness logiv
+  getters: {//getter property can fetch state and it is used for bussiness logic
     doneEdit: state => {
       const data = state.userData;
       var arr = [];
