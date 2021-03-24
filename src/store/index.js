@@ -10,7 +10,7 @@ export default new Vuex.Store({
 
     userData: [],
     showModal: true,
-    transactionLength: 1,
+    transactionLength: 0,
   },
   getters: {//getter property can fetch state and it is used for bussiness logic
     doneEdit: state => {
@@ -23,7 +23,6 @@ export default new Vuex.Store({
       return modalValue;
     },
     getTransactionLength: (state) => {
-      debugger;
       var transactionLength = state.transactionLength //store the state value in to new variable
       
       return transactionLength;
